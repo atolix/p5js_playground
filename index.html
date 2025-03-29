@@ -12,6 +12,14 @@
       padding: 0.5em;
       background: #f0f0f0;
     }
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .code-container {
+      margin-bottom: 10px;
+    }
     textarea {
       width: 100%;
       height: 150px;
@@ -19,21 +27,44 @@
       font-size: 14px;
       margin-bottom: 0.5em;
     }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
     button {
       padding: 0.5em 1em;
       font-size: 16px;
-      margin-bottom: 0.5em;
     }
     iframe {
       width: 100%;
-      height: 500px;
+      flex-grow: 1;
       border: none;
       background: white;
+    }
+    .fullscreen-iframe {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    .control-panel {
+      position: relative;
+      z-index: 1;
+      background: rgba(240, 240, 240, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <textarea id="code">
+  <div class="container">
+    <div class="control-panel">
+      <div id="codeContainer" class="code-container">
+        <textarea id="code">
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(200);
@@ -49,12 +80,33 @@ function windowResized() {
   background(200);
 }
 </textarea>
-  <br />
-  <button onclick="runCode()">Play</button>
-  <br />
-  <iframe id="output"></iframe>
+      </div>
+      <div class="buttons">
+        <button onclick="runCode()">Play</button>
+        <button onclick="toggleCode()">コード表示切替</button>
+      </div>
+    </div>
+    <iframe id="output"></iframe>
+  </div>
 
   <script>
+    let codeVisible = true;
+
+    function toggleCode() {
+      const codeContainer = document.getElementById('codeContainer');
+      const iframe = document.getElementById('output');
+
+      codeVisible = !codeVisible;
+
+      if (codeVisible) {
+        codeContainer.style.display = 'block';
+        iframe.classList.remove('fullscreen-iframe');
+      } else {
+        codeContainer.style.display = 'none';
+        iframe.classList.add('fullscreen-iframe');
+      }
+    }
+
     function runCode() {
       const userCode = document.getElementById('code').value;
       const blob = new Blob(
