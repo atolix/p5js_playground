@@ -9,60 +9,77 @@
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 0.5em;
-      background: #f0f0f0;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
     }
     .container {
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      width: 100vw;
       height: 100vh;
     }
     .code-container {
       margin-bottom: 10px;
+      transition: height 0.3s ease;
     }
     textarea {
       width: 100%;
-      height: 150px;
+      height: 180px;
       font-family: monospace;
       font-size: 14px;
       margin-bottom: 0.5em;
+      background-color: rgba(30, 30, 30, 0.7);
+      color: #fff;
+      border: 1px solid #555;
+      resize: none;
     }
     .buttons {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 0;
     }
     button {
       padding: 0.5em 1em;
       font-size: 16px;
+      background-color: rgba(60, 60, 60, 0.8);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: rgba(80, 80, 80, 0.9);
     }
     iframe {
-      width: 100%;
-      flex-grow: 1;
-      border: none;
-      background: white;
-    }
-    .fullscreen-iframe {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
+      border: none;
       z-index: 0;
     }
     .control-panel {
-      position: relative;
-      z-index: 1;
-      background: rgba(240, 240, 240, 0.8);
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 8px;
+      max-width: 600px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: opacity 0.3s ease;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="control-panel">
+    <iframe id="output"></iframe>
+    <div class="control-panel" id="controlPanel">
       <div id="codeContainer" class="code-container">
         <textarea id="code">
 function setup() {
@@ -117,27 +134,35 @@ function windowResized() {
       </div>
       <div class="buttons">
         <button onclick="runCode()">Play</button>
-        <button onclick="toggleCode()">Edit</button>
+        <button onclick="toggleCode()">Hide Editor</button>
       </div>
     </div>
-    <iframe id="output"></iframe>
   </div>
 
   <script>
     let codeVisible = true;
 
+    // 初期表示時にコードの実行
+    window.onload = function() {
+      runCode();
+    };
+
     function toggleCode() {
       const codeContainer = document.getElementById('codeContainer');
-      const iframe = document.getElementById('output');
+      const controlPanel = document.getElementById('controlPanel');
+      const toggleButton = document.querySelector('.buttons button:last-child');
 
       codeVisible = !codeVisible;
 
       if (codeVisible) {
         codeContainer.style.display = 'block';
-        iframe.classList.remove('fullscreen-iframe');
+        controlPanel.style.background = 'rgba(0, 0, 0, 0.6)';
+        toggleButton.textContent = 'Hide Editor';
       } else {
         codeContainer.style.display = 'none';
-        iframe.classList.add('fullscreen-iframe');
+        controlPanel.style.background = 'rgba(0, 0, 0, 0.3)';
+        controlPanel.style.padding = '10px';
+        toggleButton.textContent = 'Show Editor';
       }
     }
 
@@ -172,8 +197,6 @@ function windowResized() {
       const iframe = document.getElementById('output');
       iframe.src = url;
     }
-
-    runCode();
   </script>
 </body>
 </html>
