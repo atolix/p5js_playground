@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>p5.js Playground</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/theme/dracula.min.css">
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/javascript/javascript.min.js"></script>
+
   <style>
     body {
       font-family: sans-serif;
@@ -21,19 +28,7 @@
     .code-container {
       margin-bottom: 10px;
       transition: height 0.3s ease;
-    }
-    textarea {
-      width: 100%;
       height: 80vh;
-      font-family: monospace;
-      font-size: 14px;
-      margin-bottom: 0.5em;
-      background-color: rgba(0, 0, 0, 0.3);
-      color: #fff;
-      border: none;
-      resize: none;
-      outline: none;
-      padding: 10px;
     }
     .buttons {
       display: flex;
@@ -75,6 +70,89 @@
     }
     .hidden {
       display: none;
+    }
+    /* CodeMirror カスタムスタイル */
+    .CodeMirror {
+      height: 100%;
+      font-size: 14px;
+      background-color: rgba(0, 0, 0, 0.3) !important;
+      color: #fff;
+      border: none;
+      resize: none;
+      outline: none;
+      padding: 10px;
+    }
+    .CodeMirror-gutters {
+      background-color: rgba(0, 0, 0, 0.2) !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .CodeMirror-linenumber {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* GitHub Dark風のカスタムテーマ */
+    .cm-s-github-dark.CodeMirror {
+      background-color: transparent !important;
+      color: #ffffff;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+    .cm-s-github-dark .CodeMirror-gutters {
+      background-color: rgba(0, 0, 0, 0.3) !important;
+      border-right: 1px solid rgba(110, 118, 129, 0.3);
+    }
+    .cm-s-github-dark .CodeMirror-linenumber {
+      color: rgba(139, 148, 158, 0.8);
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+    .cm-s-github-dark .cm-keyword {
+      color: #ff7b72;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-def {
+      color: #79c0ff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-variable {
+      color: #e6edf3;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-variable-2 {
+      color: #e6edf3;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-property {
+      color: #79c0ff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-string {
+      color: #a5d6ff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-string-2 {
+      color: #a5d6ff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-comment {
+      color: #a5a5a5;
+      font-style: italic;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-number {
+      color: #79c0ff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-operator {
+      color: #ff7b72;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .cm-meta {
+      color: #7d8590;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    }
+    .cm-s-github-dark .CodeMirror-cursor {
+      border-left: 2px solid #c9d1d9;
+    }
+    .cm-s-github-dark .CodeMirror-selected {
+      background: rgba(56, 139, 253, 0.2);
     }
   </style>
 </head>
@@ -143,11 +221,31 @@ function windowResized() {
 
   <script>
     let codeVisible = true;
+    let editor; // CodeMirrorエディタのインスタンス
 
-    // 初期表示時にコードの実行
+    // 初期表示時にコードエディタの初期化とコードの実行
     window.onload = function() {
+      initCodeEditor();
       runCode();
     };
+
+    // CodeMirrorエディタの初期化
+    function initCodeEditor() {
+      const textArea = document.getElementById('code');
+      editor = CodeMirror.fromTextArea(textArea, {
+        mode: "javascript",
+        theme: "github-dark",
+        lineNumbers: true,
+        lineWrapping: true,
+        indentUnit: 2,
+        tabSize: 2,
+        autoCloseBrackets: true,
+        matchBrackets: true
+      });
+
+      // エディタのサイズを親要素に合わせる
+      editor.refresh();
+    }
 
     function toggleCode() {
       const codeContainer = document.getElementById('codeContainer');
@@ -160,6 +258,7 @@ function windowResized() {
         codeContainer.style.display = 'block';
         controlPanel.style.background = 'transparent';
         toggleButton.textContent = 'Hide Editor';
+        setTimeout(() => editor.refresh(), 10); // エディタの表示を更新
       } else {
         codeContainer.style.display = 'none';
         controlPanel.style.background = 'rgba(0, 0, 0, 0.2)';
@@ -169,7 +268,9 @@ function windowResized() {
     }
 
     function runCode() {
-      const userCode = document.getElementById('code').value;
+      // CodeMirrorからコードを取得
+      const userCode = editor ? editor.getValue() : document.getElementById('code').value;
+
       const blob = new Blob(
         [`
           <html>
