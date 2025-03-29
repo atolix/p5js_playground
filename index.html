@@ -4,79 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>p5.js Playground</title>
+  <!-- p5.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #000;
-      overflow: hidden;
-    }
-    .container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-    }
-    .code-container {
-      margin-bottom: 10px;
-      transition: height 0.3s ease;
-    }
-    textarea {
-      width: 100%;
-      height: 80vh;
-      font-family: monospace;
-      font-size: 14px;
-      margin-bottom: 0.5em;
-      background-color: rgba(0, 0, 0, 0.3);
-      color: #fff;
-      border: none;
-      resize: none;
-      outline: none;
-      padding: 10px;
-    }
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 0;
-    }
-    button {
-      padding: 0.5em 1em;
-      font-size: 16px;
-      background-color: rgba(60, 60, 60, 0.5);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: rgba(80, 80, 80, 0.7);
-    }
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      z-index: 0;
-    }
-    .control-panel {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 10;
-      background: transparent;
-      padding: 20px;
-      width: calc(100vw - 40px);
-      height: calc(100vh - 40px);
-      box-shadow: none;
-      transition: all 0.3s ease;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/theme/dracula.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/javascript/javascript.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -141,64 +81,7 @@ function windowResized() {
     </div>
   </div>
 
-  <script>
-    let codeVisible = true;
-
-    // 初期表示時にコードの実行
-    window.onload = function() {
-      runCode();
-    };
-
-    function toggleCode() {
-      const codeContainer = document.getElementById('codeContainer');
-      const controlPanel = document.getElementById('controlPanel');
-      const toggleButton = document.querySelector('.buttons button:last-child');
-
-      codeVisible = !codeVisible;
-
-      if (codeVisible) {
-        codeContainer.style.display = 'block';
-        controlPanel.style.background = 'transparent';
-        toggleButton.textContent = 'Hide Editor';
-      } else {
-        codeContainer.style.display = 'none';
-        controlPanel.style.background = 'rgba(0, 0, 0, 0.2)';
-        controlPanel.style.padding = '10px';
-        toggleButton.textContent = 'Show Editor';
-      }
-    }
-
-    function runCode() {
-      const userCode = document.getElementById('code').value;
-      const blob = new Blob(
-        [`
-          <html>
-          <head>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"><\/script>
-            <style>
-              body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-              }
-              canvas {
-                display: block;
-              }
-            </style>
-          </head>
-          <body>
-            <script>
-              ${userCode}
-            <\/script>
-          </body>
-          </html>
-        `],
-        { type: 'text/html' }
-      );
-      const url = URL.createObjectURL(blob);
-      const iframe = document.getElementById('output');
-      iframe.src = url;
-    }
-  </script>
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
