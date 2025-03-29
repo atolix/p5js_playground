@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>p5.js Playground</title>
+
+  <!-- PWA related settings -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="p5.js Play">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
   <!-- p5.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
 
@@ -83,5 +92,18 @@ function windowResized() {
 
   <!-- Custom JavaScript -->
   <script src="script.js"></script>
+
+  <!-- サービスワーカーの登録 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').then(function(registration) {
+          console.log('ServiceWorker登録成功: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker登録失敗: ', err);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
