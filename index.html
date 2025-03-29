@@ -24,14 +24,16 @@
     }
     textarea {
       width: 100%;
-      height: 180px;
+      height: 80vh;
       font-family: monospace;
       font-size: 14px;
       margin-bottom: 0.5em;
-      background-color: rgba(30, 30, 30, 0.7);
+      background-color: rgba(0, 0, 0, 0.3);
       color: #fff;
-      border: 1px solid #555;
+      border: none;
       resize: none;
+      outline: none;
+      padding: 10px;
     }
     .buttons {
       display: flex;
@@ -41,14 +43,14 @@
     button {
       padding: 0.5em 1em;
       font-size: 16px;
-      background-color: rgba(60, 60, 60, 0.8);
+      background-color: rgba(60, 60, 60, 0.5);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
     button:hover {
-      background-color: rgba(80, 80, 80, 0.9);
+      background-color: rgba(80, 80, 80, 0.7);
     }
     iframe {
       position: absolute;
@@ -61,15 +63,15 @@
     }
     .control-panel {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 0;
+      left: 0;
       z-index: 10;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 15px;
-      border-radius: 8px;
-      max-width: 600px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      transition: opacity 0.3s ease;
+      background: transparent;
+      padding: 20px;
+      width: calc(100vw - 40px);
+      height: calc(100vh - 40px);
+      box-shadow: none;
+      transition: all 0.3s ease;
     }
     .hidden {
       display: none;
@@ -156,11 +158,11 @@ function windowResized() {
 
       if (codeVisible) {
         codeContainer.style.display = 'block';
-        controlPanel.style.background = 'rgba(0, 0, 0, 0.6)';
+        controlPanel.style.background = 'transparent';
         toggleButton.textContent = 'Hide Editor';
       } else {
         codeContainer.style.display = 'none';
-        controlPanel.style.background = 'rgba(0, 0, 0, 0.3)';
+        controlPanel.style.background = 'rgba(0, 0, 0, 0.2)';
         controlPanel.style.padding = '10px';
         toggleButton.textContent = 'Show Editor';
       }
