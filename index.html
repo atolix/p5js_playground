@@ -39,8 +39,12 @@ function setup() {
 }
 
 function draw() {
-  // Reset background
   background(0);
+
+  let centerX = width / 2;
+  let centerY = height / 2;
+
+  ellipse(centerX, centerY, 200);
 }
 
 function windowResized() {
