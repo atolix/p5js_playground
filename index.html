@@ -42,40 +42,10 @@ function draw() {
   // Reset background
   background(0);
 
-  let centerX = width / 2;
-  let centerY = height / 2;
-
-  // Draw circle in the center
   noFill();
   stroke(255);
   strokeWeight(2);
   ellipse(centerX, centerY, 200);
-
-  // Angle based on time progression
-  let angle = frameCount * 0.01;
-
-  // Calculate coordinates for the point rotating around the circle
-  let radius = 100;
-  let x = centerX + cos(angle) * radius;
-  let y = centerY + sin(angle) * radius;
-
-  // Draw the point
-  fill(255);
-  ellipse(x, y, 20);
-
-  // Display coordinates and angle near the point
-  fill(255);
-  noStroke();
-  textSize(16);
-  textAlign(LEFT);
-
-  // Convert radians to degrees
-  let degrees = Math.round(angle * 180 / PI) % 360;
-
-  // Display to the right of the point
-  text("x: " + Math.round(x), x + 15, y - 15);
-  text("y: " + Math.round(y), x + 15, y + 5);
-  text("Degrees: " + degrees, x + 15, y + 25);
 }
 
 function windowResized() {
@@ -93,14 +63,13 @@ function windowResized() {
   <!-- Custom JavaScript -->
   <script src="script.js"></script>
 
-  <!-- サービスワーカーの登録 -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('sw.js').then(function(registration) {
-          console.log('ServiceWorker登録成功: ', registration.scope);
+          console.log('ServiceWorker registered: ', registration.scope);
         }, function(err) {
-          console.log('ServiceWorker登録失敗: ', err);
+          console.log('ServiceWorker registration failed: ', err);
         });
       });
     }
