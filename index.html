@@ -34,18 +34,22 @@
       display: flex;
       gap: 10px;
       margin-bottom: 0;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
     }
     button {
       padding: 0.5em 1em;
       font-size: 16px;
-      background-color: rgba(60, 60, 60, 0.5);
+      background-color: rgba(60, 60, 60, 0.7);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
     button:hover {
-      background-color: rgba(80, 80, 80, 0.7);
+      background-color: rgba(80, 80, 80, 0.9);
     }
     iframe {
       position: absolute;
@@ -261,7 +265,7 @@ function windowResized() {
         setTimeout(() => editor.refresh(), 10); // エディタの表示を更新
       } else {
         codeContainer.style.display = 'none';
-        controlPanel.style.background = 'rgba(0, 0, 0, 0.2)';
+        controlPanel.style.background = 'transparent';
         controlPanel.style.padding = '10px';
         toggleButton.textContent = 'Show Editor';
       }
